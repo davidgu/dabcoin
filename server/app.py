@@ -181,6 +181,20 @@ def verify_signature(public_key, data, signature):
     else:
         print("Failed")
 
+digits58 = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+ 
+def decode_base58(bc, length):
+    n = 0
+    for char in bc:
+        n = n * 58 + digits58.index(char)
+    return n.to_bytes(length, 'big')
+
+def check_address(address):
+    try:
+        bcbytes = decode_base58(bc, 27)
+        return bcbytes[-12:] == sha256(sha256(bcbytes[:-12]).digest()).digest()[:12]
+    except Exception:
+        return False
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
@@ -243,4 +257,6 @@ def save_blockchain():
 def load_blockchain():
     with open('blockchain.pickle', 'rb') as fp:
         blockchain = pickle.loads(fp.read())
-                
+
+if __name__ = '__main__':
+    app.run(host='0.0.0.0')
