@@ -1008,6 +1008,12 @@ balanced-match@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/balanced-match/-/balanced-match-1.0.0.tgz#89b4d199ab2bee49de164ea02b89ce462d71b767"
 
+base-x@^3.0.2:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/base-x/-/base-x-3.0.4.tgz#94c1788736da065edb1d68808869e357c977fa77"
+  dependencies:
+    safe-buffer "^5.0.1"
+
 base64-js@^1.0.2:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/base64-js/-/base64-js-1.3.0.tgz#cab1e6118f051095e58b5281aea8c1cd22bfc0e3"
@@ -1208,6 +1214,19 @@ browserslist@^2.1.2, browserslist@^2.5.1:
   dependencies:
     caniuse-lite "^1.0.30000792"
     electron-to-chromium "^1.3.30"
+
+bs58@^4.0.0:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/bs58/-/bs58-4.0.1.tgz#be161e76c354f6f788ae4071f63f34e8c4f0a42a"
+  dependencies:
+    base-x "^3.0.2"
+
+bs58check@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/bs58check/-/bs58check-2.1.1.tgz#8a5d0e587af97b784bf9cbf1b29f454d82bc0222"
+  dependencies:
+    bs58 "^4.0.0"
+    create-hash "^1.1.0"
 
 bser@1.0.2:
   version "1.0.2"
@@ -1733,6 +1752,12 @@ crypto-browserify@^3.11.0:
     public-encrypt "^4.0.0"
     randombytes "^2.0.0"
     randomfill "^1.0.3"
+
+crypto-hashing@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/crypto-hashing/-/crypto-hashing-1.0.0.tgz#30e167371914309553a1ebeb1cbe6753b0c88caa"
+  dependencies:
+    create-hash "^1.1.2"
 
 crypto-random-string@^1.0.0:
   version "1.0.0"
