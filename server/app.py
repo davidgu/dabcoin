@@ -2,6 +2,7 @@ import requests
 import hashlib
 import json
 import base64
+import pickle
 
 from time import time
 from uuid import uuid4
@@ -221,9 +222,17 @@ def get_balance(address):
         transactions = block['transactions']
         for transaction in transactions:
             if transaction['sender'] == address:
-                bal -= transaction['amount']
+                bal -= float(transaction['amount'])
             if transaction['recipient'] == address:
-                bal += transaction['amount']
+                bal += float(transaction['amount'])
 
     return str(bal)
+
+def save_blockchain():
+    with open('blockchain.pickle', 'wb') as fp:
+        fp.write(pickle.dumps(blockchain))
+
+def load_blockchain():
+    with open('blockchain.pickle', 'rb') as fp:
+        blockchain = pickle.loads(fp.read())
                 
