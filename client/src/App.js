@@ -24,7 +24,8 @@ class App extends Component {
       wallet: wallet,
       view: 0,
       balance: 'Pending...',
-      dab: false
+      dab: false,
+      event: null
     }
 
     this.numCases = 21
@@ -60,7 +61,8 @@ class App extends Component {
     let dabData = []
     if (this.state.dab) {
       count++
-      if (count % this.timeInterval === 0) {
+      if (count % this.timeInterval == 0) {
+        this.setState({ test: event })
         maxAX = event.acceleration.x.toFixed(2)
         maxAY = event.acceleration.y.toFixed(2)
         maxAZ = event.acceleration.z.toFixed(2)
@@ -119,6 +121,7 @@ class App extends Component {
       </div>,
       <div className='Wallet-container'>
         <Button color='green' onClick={this.handleDab}>Dab</Button>
+        {this.state.test}
         {back}
       </div>
     ]
