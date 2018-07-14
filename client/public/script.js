@@ -18,7 +18,7 @@ $(document).ready(function() {
     isMeasuring = false;
     acc = acc.slice(0,numCases);
     vel = vel.slice(0,numCases);
-    var finalArr = [acc,vel,isDab];
+    var finalArr = [acc,vel];
     $("#words3").html("STOPPED");
     $.ajax({
       type: "POST",
