@@ -24,6 +24,7 @@ class App extends Component {
       wallet: wallet,
       view: 0,
       balance: 'Pending...',
+      test: null,
       dab: false
     }
 
@@ -56,6 +57,7 @@ class App extends Component {
 
   handleDeviceMotion (event) {
     console.log('hi')
+    this.setState({ test: 'test' })
     fetch('http://one.dabcoin.1lab.me:5000/mine', {
       method: 'POST',
       headers: {
@@ -138,6 +140,7 @@ class App extends Component {
       <div className='Wallet'>
         <header className='Wallet-header'>
           <h1 index={0} className='Wallet-title' onClick={this.handleClick} >DabCoin Wallet</h1>
+          {this.state.test}
         </header>
         {views[this.state.view]}
       </div>
