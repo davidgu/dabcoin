@@ -2,7 +2,7 @@ import { randomBytes } from 'crypto'
 import cryptoHash from 'crypto-hashing'
 import bs58check from 'bs58check'
 import secp256k1 from 'secp256k1'
-import * as fetch from 'whatwg-fetch'
+import 'whatwg-fetch'
 
 class Wallet {
   constructor (privKey = null) {
@@ -28,6 +28,12 @@ class Wallet {
   get address () {
     let hash = cryptoHash('hash160', this.pubKey)
     return 'dab' + bs58check.encode(hash)
+  }
+
+  getBalance () {
+    return fetch(`http://one.dabcoin.1lab.me:5000/balance/${this.address}`, {
+      method: 'GET'
+    }).then(response => response.text())
   }
 
   sign (data) {

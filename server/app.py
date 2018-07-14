@@ -117,6 +117,7 @@ CORS(app)
 @app.route('/mine', methods=['POST'])
 def mine():
     values = request.get_json()
+    print(values['dab_data'])
     required = ['address']
     if not all(k in values for k in required):
         return 'Missing values', 404

@@ -3,6 +3,7 @@ import Wallet from './Wallet'
 import './App.css'
 import 'semantic-ui-css/semantic.min.css'
 import { Button } from 'semantic-ui-react'
+import 'whatwg-fetch'
 
 class App extends Component {
   constructor (props) {
@@ -21,14 +22,73 @@ class App extends Component {
 
     this.state = {
       wallet: wallet,
-      view: 0
+      view: 0,
+      balance: 'Pending...',
+      dab: false
     }
 
+    this.numCases = 21
+    this.timeInterval = 3
+
     this.handleClick = this.handleClick.bind(this)
+    this.handleDab = this.handleDab.bind(this)
+    this.handleDeviceMotion = this.handleDeviceMotion.bind(this)
+    this.updateBalance = this.updateBalance.bind(this)
+
+    window.addEventListener('devicemotion', this.handleDeviceMotion)
+    window.addEventListener('deviceorientation', this.handleDeviceOrientation)
+
+    setInterval(this.updateBalance, 1000)
+  }
+
+  updateBalance () {
+    this.state.wallet.getBalance().then(data => {
+      this.setState({ balance: data })
+    })
+  }
+
+  handleDeviceMotion (event, data) {
+    let count = 0
+    let maxAX, maxAY, maxAZ
+    let dabData = []
+    if (this.state.dab) {
+      count++
+      if (count % this.timeInterval === 0) {
+        maxAX = event.acceleration.x.toFixed(2)
+        maxAY = event.acceleration.y.toFixed(2)
+        maxAZ = event.acceleration.z.toFixed(2)
+        dabData.push([maxAX, maxAY, maxAZ])
+        if (dabData.length >= this.numCases) {
+          fetch('http://one.dabcoin.1lab.me:5000/mine', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              'address': this.address,
+              'dab_data': dabData
+            })
+          })
+          this.setState({ dab: false })
+          dabData = []
+        }
+      }
+    }
+    console.log(event)
+    console.log(data)
+  }
+
+  handleDeviceOrientation (event, data) {
+    console.log(event)
+    console.log(data)
   }
 
   handleClick (event, data) {
     this.setState({ view: data.index })
+  }
+
+  handleDab (event, data) {
+    this.setState({ dab: true })
   }
 
   render () {
@@ -36,7 +96,7 @@ class App extends Component {
     const views = [
       <div className='main'>
         <div className='Wallet-container'>
-          <p>Balance: <code>10 dabcoins</code></p>
+          <p>Balance: <code>{this.state.balance}</code></p>
         </div>
         <div className='Wallet-container'>
           <Button index={1} color='green' onClick={this.handleClick}>Dab</Button>
@@ -53,7 +113,7 @@ class App extends Component {
         {back}
       </div>,
       <div className='Wallet-container'>
-        <p>START DABBING</p>
+        <Button color='green' onClick={this.handleDab}>Dab</Button>
         {back}
       </div>
     ]
