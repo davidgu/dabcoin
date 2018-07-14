@@ -1,6 +1,7 @@
 import requests
 import hashlib
 import json
+import base64
 
 from time import time
 from uuid import uuid4
@@ -8,10 +9,7 @@ from flask import Flask
 from flask import request
 from textwrap import dedent
 from urllib.parse import urlparse
-
-app = Flask(__name__)
-node_identifier = str(uuid4().replace('-', ''))
-blockchain = Blockchain()
+from ecdsa import VerifyingKey, SECP256k1
 
 class Blockchain(object):
     def __init__(self):
@@ -100,7 +98,7 @@ class Blockchain(object):
                 chain = response.json()['chain']
 
                 # If length is longer and new chain is valid, use it
-                if length > max_length && self.valid_chain(chain):
+                if length > max_length and self.valid_chain(chain):
                     max_length = length
                     new_chain = chain
         
@@ -110,7 +108,9 @@ class Blockchain(object):
 
         return False
 
-
+app = Flask(__name__)
+node_identifier = str(uuid4()).replace('-', '')
+blockchain = Blockchain()
 
 @app.route('/mine', methods=['GET'])
 def mine():
@@ -143,13 +143,30 @@ def new_transaction():
     values = request.get_json()
 
     # Check if required fields are in the response
-    required = ['sender', 'recipient', 'amount']
+    # Sender: address of sender, hashed public_key
+    # Signature is timestamp signed by private_key
+    required = ['sender', 'public_key','timestamp', 'signature', 'recipient', 'amount']
     if not all(k in values for k in required):
         return 'Missing values', 404
 
-    index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
-    response = {'message': f'Transaction will be added to block {index}'}
+    key = base64.b64decode(values['public_key']).decode('utf-8')
+    sig = base64.b64decode(values['signature']).decode('utf-8')
+    publicKey = PublicKey(pubkey=key)
+
+    if publicKey.ecdsa_verify(msg=values['timestamp'], raw_sig=sig):
+        index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
+        response = {'message': f'Transaction will be added to block {index}'}
+    else:
+        response = {'message': 'Transaction failed! Signature incorrect!'}
     return jsonify(response), 201
+
+def verify_signature(public_key, data, signature):
+    vk = VerifyingKey.from_string(bytes.fromhex(public_key), curve=SECP256k1)
+    if vk.verify(bytes.fromhex(signature), bytes.fromhex(data)):
+        print("Verified")
+    else:
+        print("Failed")
+
 
 @app.route('/chain', methods=['GET'])
 def full_chain():
