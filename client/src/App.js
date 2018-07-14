@@ -3,6 +3,8 @@ import Wallet from './Wallet'
 import './App.css'
 import 'semantic-ui-css/semantic.min.css'
 import { Button, Input } from 'semantic-ui-react'
+import QRCode from 'qrcode.react'
+import QrReader from 'react-qr-reader'
 import 'whatwg-fetch'
 
 class App extends Component {
@@ -23,7 +25,8 @@ class App extends Component {
     this.state = {
       wallet: wallet,
       view: 0,
-      balance: 'Pending...'
+      balance: 'Pending...',
+      qr: false
     }
 
     this.numCases = 21
@@ -32,6 +35,8 @@ class App extends Component {
     this.handleClick = this.handleClick.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.handleSend = this.handleSend.bind(this)
+    this.handleScan = this.handleScan.bind(this)
+    this.handleQr = this.handleQr.bind(this)
     this.updateBalance = this.updateBalance.bind(this)
 
     setInterval(this.updateBalance, 1000)
@@ -63,8 +68,30 @@ class App extends Component {
     window.location = window.location + 'miner.html'
   }
 
+  handleError (err) {
+    console.error(err)
+  }
+
+  handleScan (data) {
+    if (data) {
+      this.setState({ recipient: data, qr: false })
+    }
+  }
+
+  handleQr (event, data) {
+    this.setState({ qr: !this.state.qr })
+  }
+
   render () {
     const back = <Button className='Wallet-container' index={0} onClick={this.handleClick}>Back to menu</Button>
+    const qr = (
+      <QrReader
+        delay={300}
+        onError={this.handleError}
+        onScan={this.handleScan}
+        style={{ width: '20%' }}
+      />
+    )
     const views = [
       <div className='main'>
         <div className='Wallet-container'>
@@ -77,16 +104,20 @@ class App extends Component {
         </div>
       </div>,
       <div className='Wallet-container'>
+        {this.state.qr ? qr : null}
         <Input className='Wallet-container' id='recipient' value={this.state.recipient} onChange={this.handleChange} placeholder='DabCoin address' />
         <br />
         <Input className='Wallet-container' id='amount' value={this.state.amount} onChange={this.handleChange} placeholder='Amount' />
         <br />
+        <Button className='Wallet-container' icon='qrcode' onClick={this.handleQr} />
         <Button className='Wallet-container' color='green' disabled={!(this.state.recipient && this.state.amount)} onClick={this.handleSend}>Dab</Button>
         <br />
         {back}
       </div>,
       <div className='Wallet-container'>
         <p>Your address is <code>{this.state.wallet.address}</code></p>
+        <QRCode value={this.state.wallet.address} />
+        <br />
         {back}
       </div>
     ]
