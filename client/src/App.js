@@ -35,10 +35,17 @@ class App extends Component {
     this.handleDeviceMotion = this.handleDeviceMotion.bind(this)
     this.updateBalance = this.updateBalance.bind(this)
 
+    setInterval(this.updateBalance, 1000)
+  }
+
+  componentDidMount () {
     window.addEventListener('devicemotion', this.handleDeviceMotion)
     window.addEventListener('deviceorientation', this.handleDeviceOrientation)
+  }
 
-    setInterval(this.updateBalance, 1000)
+  componentWillUnmount () {
+    window.removeEventListener('devicemotion', this.handleDeviceMotion)
+    window.removeEventListener('deviceorientation', this.handleDeviceOrientation)
   }
 
   updateBalance () {
@@ -47,7 +54,18 @@ class App extends Component {
     })
   }
 
-  handleDeviceMotion (event, data) {
+  handleDeviceMotion (event) {
+    console.log('hi')
+    fetch('http://one.dabcoin.1lab.me:5000/mine', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'address': this.address,
+        'dab_data': [1,2,3]
+      })
+    })
     let count = 0
     let maxAX, maxAY, maxAZ
     let dabData = []
@@ -74,8 +92,6 @@ class App extends Component {
         }
       }
     }
-    console.log(event)
-    console.log(data)
   }
 
   handleDeviceOrientation (event, data) {
