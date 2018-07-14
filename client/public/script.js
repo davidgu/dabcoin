@@ -23,6 +23,7 @@ $(document).ready(function() {
     $.ajax({
       type: "POST",
       url: "http://one.dabcoin.1lab.me:5000/mine",
+      dataType: "json",
       data: {
         'dab_data':JSON.stringify(finalArr),
         'address': window.localStorage.getItem('address')
