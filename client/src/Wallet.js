@@ -2,6 +2,7 @@ import { randomBytes } from 'crypto'
 import cryptoHash from 'crypto-hashing'
 import bs58check from 'bs58check'
 import secp256k1 from 'secp256k1'
+import 'whatwg-fetch'
 
 class Wallet {
   constructor (privKey = null) {
@@ -37,6 +38,18 @@ class Wallet {
     ])
     console.log('padded: ' + paddedData.toString('hex'))
     return secp256k1.sign(paddedData, this.privKey)
+  }
+
+  startMining () {
+    fetch('http://one.dabcoin.1lab.me:5000/mine', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'address': this.address
+      })
+    })
   }
 }
 

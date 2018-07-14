@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import Wallet from './Wallet'
 import './App.css'
+import 'semantic-ui-css/semantic.min.css';
+import { Button } from 'semantic-ui-react'
 
 class App extends Component {
   constructor () {
@@ -15,7 +17,7 @@ class App extends Component {
     console.log('Timestamp: ' + timestamp.toString('hex'))
     let signature = wallet.sign(timestamp).signature
     console.log('Signature: ' + signature.toString('hex'))
-
+    wallet.startMining()
 
     this.state = {
       wallet: wallet
@@ -24,19 +26,18 @@ class App extends Component {
 
   render () {
     return (
-      <div className='App'>
-        <header className='App-header'>
-          <h1 className='App-title'>Welcome to DabCoin</h1>
+      <div className='Wallet'>
+        <header className='Wallet-header'>
+          <h1 className='Wallet-title'>DabCoin Wallet</h1>
         </header>
-        <p className='App-intro'>
-          Private Key: <code>{this.state.wallet.privKey.toString('hex')}</code>
-        </p>
-        <p className='App-intro'>
-          Public Key: <code>{this.state.wallet.pubKey.toString('hex')}</code>
-        </p>
-        <p className='App-intro'>
-          Address: <code>{this.state.wallet.address}</code>
-        </p>
+        <div className='Wallet-container'>
+          <p>Balance: <code>10 dabcoins</code></p>
+        </div>
+        <div className='Wallet-container'>
+          <Button color='green'>Dab</Button>
+          <Button color='red'>Dab</Button>
+          <Button color='black'>Dab</Button>
+        </div>
       </div>
     )
   }

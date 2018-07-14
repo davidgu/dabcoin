@@ -9,6 +9,8 @@
     "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
     "secp256k1": "^3.5.0",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.82.0",
     "whatwg-fetch": "^2.0.4"
   },
   "scripts": {
