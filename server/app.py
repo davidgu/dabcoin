@@ -123,10 +123,10 @@ def mine():
     if not all(k in values for k in required):
         return 'Missing values', 404
 
-    print(values['dab_data'])
     req = requests.post(mlURL, json=values['dab_data'])
     print(req.text)
     if req.text == '[[1.]]':
+        print(values['dab_data'])
         last_block = blockchain.last_block
         last_proof = last_block['proof']
         proof = blockchain.proof_of_work(last_proof)
