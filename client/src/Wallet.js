@@ -2,7 +2,7 @@ import { randomBytes } from 'crypto'
 import cryptoHash from 'crypto-hashing'
 import bs58check from 'bs58check'
 import secp256k1 from 'secp256k1'
-import 'whatwg-fetch'
+import * as fetch from 'whatwg-fetch'
 
 class Wallet {
   constructor (privKey = null) {
