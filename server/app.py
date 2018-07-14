@@ -10,6 +10,7 @@ from flask import request
 from textwrap import dedent
 from urllib.parse import urlparse
 from ecdsa import VerifyingKey, SECP256k1
+from flask_cors import CORS
 
 class Blockchain(object):
     def __init__(self):
@@ -111,6 +112,7 @@ class Blockchain(object):
 app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
+CORS(app)
 
 @app.route('/mine', methods=['POST'])
 def mine():
