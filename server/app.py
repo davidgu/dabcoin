@@ -10,7 +10,7 @@ from flask import request
 from textwrap import dedent
 from urllib.parse import urlparse
 from ecdsa import VerifyingKey, SECP256k1
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 class Blockchain(object):
     def __init__(self):
