@@ -127,7 +127,7 @@ class App extends Component {
       <div className='Wallet'>
         <header className='Wallet-header'>
           <h1 index={0} className='Wallet-title' onClick={this.handleClick} >DabCoin Wallet</h1>
-          {this.state.dab}
+          {this.state.dab.toString()}
         </header>
         {views[this.state.view]}
       </div>
