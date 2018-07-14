@@ -114,14 +114,17 @@ app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 CORS(app)
+mlURL = 'http://178.128.239.183:5000/is_dab'
 
 @app.route('/mine', methods=['POST'])
 def mine():
     values = request.get_json()
-    print(values['dab_data'])
     required = ['address']
     if not all(k in values for k in required):
         return 'Missing values', 404
+
+    print(values['dab_data'])
+    #req = requests.post(mlURL, json=values['dab_data'])
 
     last_block = blockchain.last_block
     last_proof = last_block['proof']
