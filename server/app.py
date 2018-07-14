@@ -5,7 +5,7 @@ import base64
 
 from time import time
 from uuid import uuid4
-from flask import Flask
+from flask import Flask, jsonify
 from flask import request
 from textwrap import dedent
 from urllib.parse import urlparse
@@ -112,8 +112,13 @@ app = Flask(__name__)
 node_identifier = str(uuid4()).replace('-', '')
 blockchain = Blockchain()
 
-@app.route('/mine', methods=['GET'])
+@app.route('/mine', methods=['POST'])
 def mine():
+    values = request.get_json()
+    required = ['address']
+    if not all(k in values for k in required):
+        return 'Missing values', 404
+
     last_block = blockchain.last_block
     last_proof = last_block['proof']
     proof = blockchain.proof_of_work(last_proof)
@@ -121,7 +126,7 @@ def mine():
     # Reward miner
     blockchain.new_transaction(
         sender='0',
-        recipient=node_identifier,
+        recipient=values['address'],
         amount=1,
     )
 
@@ -149,11 +154,7 @@ def new_transaction():
     if not all(k in values for k in required):
         return 'Missing values', 404
 
-    key = base64.b64decode(values['public_key']).decode('utf-8')
-    sig = base64.b64decode(values['signature']).decode('utf-8')
-    publicKey = PublicKey(pubkey=key)
-
-    if publicKey.ecdsa_verify(msg=values['timestamp'], raw_sig=sig):
+    if True:
         index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
         response = {'message': f'Transaction will be added to block {index}'}
     else:
@@ -191,11 +192,11 @@ def register_nodes():
         'message': 'New nodes added',
         'total_nodes': list(blockchain.nodes),
     }
-    return jsonfiy(response), 201
+    return jsonify(response), 201
 
 @app.route('/nodes/resolve', methods=['GET'])
 def consensus():
-    replaced = blochchain.resolve_conflicts()
+    replaced = blockchain.resolve_conflicts()
     if replaced:
         response = {
             'message': 'Current chain replaced',
@@ -206,4 +207,4 @@ def consensus():
             'message': 'Chain authoritative',
             'chain': blockchain.chain
         }
-    return jsonfiy(response), 200
+    return jsonify(response), 200
