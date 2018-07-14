@@ -124,29 +124,34 @@ def mine():
         return 'Missing values', 404
 
     print(values['dab_data'])
-    #req = requests.post(mlURL, json=values['dab_data'])
+    req = requests.post(mlURL, json=values['dab_data'])
+    print(req.text)
+    if req.text == '[[1.]]':
+        last_block = blockchain.last_block
+        last_proof = last_block['proof']
+        proof = blockchain.proof_of_work(last_proof)
 
-    last_block = blockchain.last_block
-    last_proof = last_block['proof']
-    proof = blockchain.proof_of_work(last_proof)
+        # Reward miner
+        blockchain.new_transaction(
+            sender='0',
+            recipient=values['address'],
+            amount=1,
+        )
 
-    # Reward miner
-    blockchain.new_transaction(
-        sender='0',
-        recipient=values['address'],
-        amount=1,
-    )
+        previous_hash = blockchain.hash(last_block)
+        block = blockchain.new_block(proof, previous_hash)
 
-    previous_hash = blockchain.hash(last_block)
-    block = blockchain.new_block(proof, previous_hash)
-
-    response = {
-        'message': 'New block created',
-        'index': block['index'],
-        'transactions': block['transactions'],
-        'proof': block['proof'],
-        'previous_hash': block['previous_hash'],
-    }
+        response = {
+            'message': 'New block created',
+            'index': block['index'],
+            'transactions': block['transactions'],
+            'proof': block['proof'],
+            'previous_hash': block['previous_hash'],
+        }
+    else:
+        response = {
+            'message': 'That was not a dab!',
+        }
 
     return jsonify(response), 200
 
