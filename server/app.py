@@ -152,7 +152,8 @@ def new_transaction():
     # Check if required fields are in the response
     # Sender: address of sender, hashed public_key
     # Signature is timestamp signed by private_key
-    required = ['sender', 'public_key','timestamp', 'signature', 'recipient', 'amount']
+    # required = ['sender', 'public_key','timestamp', 'signature', 'recipient', 'amount']
+    required = ['sender', 'recipient', 'amount']
     if not all(k in values for k in required):
         return 'Missing values', 404
 
