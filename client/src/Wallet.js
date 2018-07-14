@@ -47,6 +47,20 @@ class Wallet {
     return secp256k1.sign(paddedData, this.privKey)
   }
 
+  send (recipient, amount) {
+    fetch('http://one.dabcoin.1lab.me:5000/transactions/new', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        'sender': this.address,
+        'recipient': recipient,
+        'amount': amount
+      })
+    })
+  }
+
   startMining () {
     fetch('http://one.dabcoin.1lab.me:5000/mine', {
       method: 'POST',

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Wallet from './Wallet'
 import './App.css'
 import 'semantic-ui-css/semantic.min.css'
-import { Button } from 'semantic-ui-react'
+import { Button, Input } from 'semantic-ui-react'
 import 'whatwg-fetch'
 
 class App extends Component {
@@ -23,30 +23,18 @@ class App extends Component {
     this.state = {
       wallet: wallet,
       view: 0,
-      balance: 'Pending...',
-      dab: false,
-      event: null
+      balance: 'Pending...'
     }
 
     this.numCases = 21
     this.timeInterval = 3
 
     this.handleClick = this.handleClick.bind(this)
-    this.handleDab = this.handleDab.bind(this)
-    this.handleDeviceMotion = this.handleDeviceMotion.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.handleSend = this.handleSend.bind(this)
     this.updateBalance = this.updateBalance.bind(this)
 
     setInterval(this.updateBalance, 1000)
-  }
-
-  componentDidMount () {
-    window.addEventListener('devicemotion', this.handleDeviceMotion)
-    window.addEventListener('deviceorientation', this.handleDeviceOrientation)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('devicemotion', this.handleDeviceMotion)
-    window.removeEventListener('deviceorientation', this.handleDeviceOrientation)
   }
 
   updateBalance () {
@@ -55,47 +43,19 @@ class App extends Component {
     })
   }
 
-  handleDeviceMotion (event) {
-    let count = 0
-    let maxAX, maxAY, maxAZ
-    let dabData = []
-    if (this.state.dab) {
-      count++
-      if (count % this.timeInterval === 0) {
-        this.setState({ test: event })
-        maxAX = event.acceleration.x.toFixed(2)
-        maxAY = event.acceleration.y.toFixed(2)
-        maxAZ = event.acceleration.z.toFixed(2)
-        dabData.push([maxAX, maxAY, maxAZ])
-        if (dabData.length >= this.numCases) {
-          fetch('http://one.dabcoin.1lab.me:5000/mine', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              'address': this.address,
-              'dab_data': dabData
-            })
-          })
-          this.setState({ dab: false })
-          dabData = []
-        }
-      }
-    }
-  }
-
-  handleDeviceOrientation (event, data) {
-    console.log(event)
-    console.log(data)
-  }
-
   handleClick (event, data) {
     this.setState({ view: data.index })
   }
 
-  handleDab (event, data) {
-    this.setState({ dab: true })
+  handleChange (event, data) {
+    let newState = {}
+    newState[data.id] = event.target.value
+    this.setState(newState)
+  }
+
+  handleSend (event, data) {
+    this.state.wallet.send(this.state.recipient, this.state.amount)
+    this.setState({ recipient: null, amount: null })
   }
 
   handleMiner (event, data) {
@@ -117,7 +77,12 @@ class App extends Component {
         </div>
       </div>,
       <div className='Wallet-container'>
-        <p>You can't send yet</p>
+        <Input className='Wallet-container' id='recipient' value={this.state.recipient} onChange={this.handleChange} placeholder='DabCoin address' />
+        <br />
+        <Input className='Wallet-container' id='amount' value={this.state.amount} onChange={this.handleChange} placeholder='Amount' />
+        <br />
+        <Button className='Wallet-container' color='green' disabled={!(this.state.recipient && this.state.amount)} onClick={this.handleSend}>Dab</Button>
+        <br />
         {back}
       </div>,
       <div className='Wallet-container'>
@@ -130,7 +95,6 @@ class App extends Component {
       <div className='Wallet'>
         <header className='Wallet-header'>
           <h1 index={0} className='Wallet-title' onClick={this.handleClick} >DabCoin Wallet</h1>
-          {this.state.dab.toString()}
         </header>
         {views[this.state.view]}
       </div>
