@@ -136,7 +136,7 @@ def mine():
     response = {
         'message': 'New block created',
         'index': block['index'],
-        'transactions': block['transaction'],
+        'transactions': block['transactions'],
         'proof': block['proof'],
         'previous_hash': block['previous_hash'],
     }
