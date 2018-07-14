@@ -23,14 +23,16 @@ class App extends Component {
       wallet: wallet,
       view: 0
     }
+
+    this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick (event, data) {
     this.setState({ view: data.index })
-    console.log(data)
   }
 
   render () {
+    const back = <Button className='Wallet-container' index={0} onClick={this.handleClick}>Back to menu</Button>
     const views = [
       <div className='main'>
         <div className='Wallet-container'>
@@ -42,14 +44,17 @@ class App extends Component {
           <Button index={3} color='black' onClick={this.handleClick}>Dab</Button>
         </div>
       </div>,
-      <div className='send'>
+      <div className='Wallet-container'>
         <p>You can't send yet</p>
+        {back}
       </div>,
-      <div className='recieve'>
+      <div className='Wallet-container'>
         <p>Your address is <code>{this.state.wallet.address}</code></p>
+        {back}
       </div>,
-      <div className='mine'>
+      <div className='Wallet-container'>
         <p>START DABBING</p>
+        {back}
       </div>
     ]
 
