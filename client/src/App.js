@@ -61,7 +61,7 @@ class App extends Component {
     let dabData = []
     if (this.state.dab) {
       count++
-      if (count % this.timeInterval == 0) {
+      if (count % this.timeInterval === 0) {
         this.setState({ test: event })
         maxAX = event.acceleration.x.toFixed(2)
         maxAY = event.acceleration.y.toFixed(2)
@@ -98,6 +98,11 @@ class App extends Component {
     this.setState({ dab: true })
   }
 
+  handleMiner (event, data) {
+    event.preventDefault()
+    window.location = window.location + 'miner.html'
+  }
+
   render () {
     const back = <Button className='Wallet-container' index={0} onClick={this.handleClick}>Back to menu</Button>
     const views = [
@@ -108,7 +113,7 @@ class App extends Component {
         <div className='Wallet-container'>
           <Button index={1} color='green' onClick={this.handleClick}>Dab</Button>
           <Button index={2} color='red' onClick={this.handleClick}>Dab</Button>
-          <Button index={3} color='black' onClick={this.handleClick}>Dab</Button>
+          <Button index={3} color='black' onClick={this.handleMiner}>Dab</Button>
         </div>
       </div>,
       <div className='Wallet-container'>
@@ -117,11 +122,6 @@ class App extends Component {
       </div>,
       <div className='Wallet-container'>
         <p>Your address is <code>{this.state.wallet.address}</code></p>
-        {back}
-      </div>,
-      <div className='Wallet-container'>
-        <Button color='green' onClick={this.handleDab}>Dab</Button>
-        {this.state.test}
         {back}
       </div>
     ]

@@ -14,6 +14,7 @@ class Wallet {
     this.privKey = privKey
     this.pubKey = secp256k1.publicKeyCreate(privKey, false)
     window.localStorage.setItem('privKey', this.privKey.toString('hex'))
+    window.localStorage.setItem('address', this.address)
   }
 
   static inStorage () {
