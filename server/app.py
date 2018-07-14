@@ -210,3 +210,18 @@ def consensus():
             'chain': blockchain.chain
         }
     return jsonify(response), 200
+
+@app.route('/balance/<string:address>', methods=['GET'])
+def get_balance(address):
+    bal = 0
+
+    for block in blockchain.chain:
+        transactions = block['transactions']
+        for transaction in transactions:
+            if transaction['sender'] == address:
+                bal -= transaction['amount']
+            if transaction['recipient'] == address:
+                bal += transaction['amount']
+
+    return str(bal)
+                
