@@ -258,5 +258,5 @@ def load_blockchain():
     with open('blockchain.pickle', 'rb') as fp:
         blockchain = pickle.loads(fp.read())
 
-if __name__ = '__main__':
+if __name__ == '__main__':
     app.run(host='0.0.0.0')
