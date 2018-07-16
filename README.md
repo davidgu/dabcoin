@@ -10,3 +10,4 @@ Proof-of-dab based cryptocurrency written in 7 hours. A collaboration with [Marc
 3. Edit the variable named `mlURL` in `server/app.py` to specify the URL of the classifier server
 4. Run the DabCoin node by executing `flask run` in the `server/` directory
 ### Classifier
+1. Instructions for setting up the classifer can be found in [its repository](https://github.com/curtischong/dab_database)
