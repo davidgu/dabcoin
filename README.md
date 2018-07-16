@@ -1,6 +1,6 @@
 # DabCoin
 
-Proof-of-dab based cryptocurrency written in 7 hours. A collaboration with [Marcel O'Neil](https://github.com/marceloneil) and [Curtis Chong](https://github.com/curtischong). Marcel wrote the React based front end and web wallet, Curtis wrote the dab-or-not-dab classifier, and I wrote the cryptocurrency network nodes and the API for clients to interact with the network. Made for [TerribleHack XI](terriblehack.website). 
+Proof-of-dab based cryptocurrency. It's like proof of work, but you can only mine blocks if the data from your device accelerometer indicates that you are dabbing. Contains both blockchain technology and artificial intelligence, as well as other associated buzzwords. A collaboration with [Marcel O'Neil](https://github.com/marceloneil) and [Curtis Chong](https://github.com/curtischong). Marcel wrote the React based front end and web wallet, Curtis wrote the dab-or-not-dab classifier, and I wrote the cryptocurrency network nodes and the API for clients to interact with the network. Written in 7 hours for [TerribleHack XI](terriblehack.website). 
 
 ## Getting it Running
 ### Front End
