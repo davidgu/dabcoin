@@ -167,6 +167,14 @@ def new_transaction():
     if not all(k in values for k in required):
         return 'Missing values', 404
 
+    # Validate the amount
+    try:
+        values['amount'] = float(values['amount'])
+    except:
+        return 'Non-numeric amount', 404
+    if values['amount'] < 0 or values['amount'] is 0:
+        return 'Transaction failed, amount cannot be zero or negative', 404
+
     if True:
         index = blockchain.new_transaction(values['sender'], values['recipient'], values['amount'])
         response = {'message': f'Transaction will be added to block {index}'}
